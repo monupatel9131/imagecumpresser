@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MpAge Calculator - All-in-One Calculators Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --bg: #F8FAFC;
+            --surface: #FFFFFF;
+            --text: #0F172A;
+            --text-muted: #64748B;
+            --border: #E2E8F0;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            --gradient: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+        }
+
+        body.dark-mode {
+            --bg: #0F172A;
+            --surface: #1E293B;
+            --text: #F8FAFC;
+            --text-muted: #94A3B8;
+            --border: #334155;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header Navigation */
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-top {
+            padding: 16px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text);
+        }
+
+        .ai-logo-icon {
+            width: 38px;
+            height: 38px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .logo-text span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-toggle {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-toggle:hover {
+            border-color: var(--primary);
+        }
+
+        /* Menu Bar */
+        nav.menu-bar {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 0 8%;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        nav.menu-bar ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav.menu-bar a {
+            display: block;
+            padding: 14px 0;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav.menu-bar a:hover, nav.menu-bar a.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Main Area */
+        main {
+            flex: 1;
+            max-width: 1100px;
+            width: 92%;
+            margin: 30px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Age Calculator Main Box */
+        .calculator-card {
+            background: var(--surface);
+            padding: 35px;
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border);
+        }
+
+        .calculator-card h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .inputs-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto 25px;
+        }
+
+        .input-box {
+            text-align: left;
+        }
+
+        .input-box label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .btn-calc {
+            flex: 2;
+            background: var(--gradient);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 18px -4px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-reset {
+            flex: 1;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Results Display */
+        .result-container {
+            margin-top: 35px;
+            display: none;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .primary-results {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .result-box {
+            background: var(--bg);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .result-box .number {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+        }
+
+        .result-box .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .analytics-title {
+            font-size: 18px;
+            font-weight: 700;
+            text-align: left;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            text-align: left;
+        }
+
+        .stat-card p {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .stat-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 4px;
+            color: var(--text);
+        }
+
+        .share-btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Image Ads Styling */
+        .ad-container {
+            background: var(--surface);
+            border: 1px dashed #CBD5E1;
+            border-radius: 16px;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ad-label {
+            position: absolute;
+            top: 6px;
+            right: 12px;
+            font-size: 10px;
+            color: #94A3B8;
+            font-weight: 700;
+            background: rgba(255,255,255,0.8);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .ad-banner-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: var(--bg);
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .ad-image {
+            width: 100px;
+            height: 70px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .ad-banner-text {
+            flex: 1;
+        }
+
+        .ad-banner-text h4 {
+            font-size: 15px;
+            color: #2563EB;
+            margin-bottom: 4px;
+        }
+
+        .ad-banner-text p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .ad-btn {
+            background: #2563EB;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        /* Calculators Directory Section */
+        .directory-section {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .directory-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .category-card {
+            background: var(--bg);
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+        }
+
+        .category-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+        }
+
+        .category-card ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .category-card a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .category-card a:hover {
+            color: var(--primary);
+        }
+
+        /* Floating WhatsApp Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #25D366;
+            color: #FFF;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 2px 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 40px 8% 20px;
+            margin-top: auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-col h4 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .footer-col a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .footer-col a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* Modal Box */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid var(--border);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        @media print {
+            header, nav, .directory-section, .ad-container, footer, .whatsapp-float, .button-group {
+                display: none !important;
+            }
+            .calculator-card { border: none; box-shadow: none; }
+        }
+
+        @media (max-width: 768px) {
+            .primary-results { grid-template-columns: 1fr; }
+            .inputs-wrapper { grid-template-columns: 1fr; }
+            .ad-banner-content { flex-direction: column; text-align: center; }
+            .ad-image { width: 100%; height: 100px; }
+            .whatsapp-text { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="header-top">
+            <a href="#" class="logo">
+                <div class="ai-logo-icon">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <div class="logo-text"><span>MpAge</span> Calculator</div>
+            </a>
+            <div class="header-controls">
+                <button class="btn-toggle" onclick="toggleLanguage()" id="lang-btn">🌐 Switch to English</button>
+                <button class="btn-toggle" onclick="toggleDarkMode()">🌙 Theme</button>
+            </div>
+        </div>
+
+        <nav class="menu-bar">
+            <ul>
+                <li><a href="#" class="active" data-key="mHome">होम</a></li>
+                <li><a href="#age-calc" data-key="mAge">एज कैलकुलेटर</a></li>
+                <li><a href="#date-calc" data-key="mDate">डेट कैलकुलेटर</a></li>
+                <li><a href="#all-calc" data-key="mAll">सभी कैलकुलेटर</a></li>
+                <li><a onclick="openModal('about')" data-key="mAbout">हमारे बारे में</a></li>
+                <li><a onclick="openModal('contact')" data-key="mContact">संपर्क करें</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Section -->
+    <main>
+        <!-- Age Calculator Card -->
+        <div class="calculator-card" id="age-calc">
+            <h1 data-key="title">सटीक आयु कैलकुलेटर (MpAge Calculator)</h1>
+            <p class="subtitle" data-key="subtitle">अपनी सटीक उम्र, जन्म का दिन, कुल जन्मदिन, राशि (Zodiac) और जीवन के आंकड़े जानें</p>
+
+            <div class="inputs-wrapper">
+                <div class="input-box">
+                    <label for="dob" data-key="dobLabel">जन्म तिथि (DOB)</label>
+                    <input type="date" id="dob">
+                </div>
+                <div class="input-box">
+                    <label for="targetDate" data-key="targetDateLabel">इस तिथि तक आयु (ऐच्छिक)</label>
+                    <input type="date" id="targetDate">
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-calc" onclick="calculateAge()" data-key="calcBtn">आयु की गणना करें</button>
+                <button class="btn-reset" onclick="resetCalculator()" data-key="resetBtn">रीसेट</button>
+            </div>
+
+            <!-- Detailed Results Container -->
+            <div class="result-container" id="result">
+                <div class="primary-results">
+                    <div class="result-box">
+                        <span class="number" id="years">0</span>
+                        <span class="label" data-key="years">वर्ष</span>
+                    </div>
+                    <div class="result-box">
+                        <span class="number" id="months">0</span>
+                        <span class="label" data-key="months">महीने</span>
+                    </div>
+                    <div class="result-box">
+                        <span class="number" id="days">0</span>
+                        <span class="label" data-key="days">दिन</span>
+                    </div>
+                </div>
+
+                <h3 class="analytics-title" data-key="analyticsTitle">जीवन और राशि संबंधी जानकारी</h3>
+                <div class="analytics-grid">
+                    <div class="stat-card">
+                        <p data-key="birthDay">जन्म का दिन</p>
+                        <h3 id="stat-birthday-day">-</h3>
+                    </div>
+                    <div class="stat-card">
+                        <p data-key="zodiac">राशि (Zodiac Sign)</p>
+                        <h3 id="stat-zodiac">-</h3>
+                    </div>
+                    <div class="stat-card">
+                        <p data-key="totalBirthdays">कुल मनाए गए जन्मदिन</p>
+                        <h3 id="stat-total-bday">0</h3>
+                    </div>
+                    <div class="stat-card">
+                        <p data-key="nextBday">अगला जन्मदिन</p>
+                        <h3 id="stat-nextbday">0 दिन</h3>
+                    </div>
+                    <div class="stat-card">
+                        <p data-key="totalDays">कुल जिए गए दिन</p>
+                        <h3 id="stat-days">0</h3>
+                    </div>
+                    <div class="stat-card">
+                        <p data-key="totalHours">कुल जिए गए घंटे</p>
+                        <h3 id="stat-hours">0</h3>
+                    </div>
+                    <div class="stat-card">
+                        <p data-key="totalMinutes">कुल जिए गए मिनट</p>
+                        <h3 id="stat-minutes">0</h3>
+                    </div>
+                </div>
+
+                <!-- Action Tools -->
+                <div class="share-btn-group">
+                    <button class="action-btn" onclick="shareResults()"><i class="fa-solid fa-copy"></i> <span data-key="copyBtn">समरी कॉपी करें</span></button>
+                    <button class="action-btn" onclick="window.print()"><i class="fa-solid fa-print"></i> <span data-key="printBtn">प्रिंट / PDF डाउनलोड</span></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Ad 1 -->
+        <div class="ad-container">
+            <span class="ad-label">ADVERTISEMENT</span>
+            <div class="ad-banner-content" onclick="alert('Demo Advertisement Space')">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=300&q=80" alt="Ad" class="ad-image">
+                <div class="ad-banner-text">
+                    <h4>🚀 High-Speed Cloud Hosting - 70% Off!</h4>
+                    <p>Upgrade your site performance with ultra-fast NVMe servers & free SSL.</p>
+                </div>
+                <div class="ad-btn">Learn More</div>
+            </div>
+        </div>
+
+        <!-- Directory of Other Calculators -->
+        <div class="directory-section" id="all-calc">
+            <h2 class="directory-title" data-key="dirTitle">Mpage.online पर सभी कैलकुलेटर का उपयोग करें</h2>
+            <div class="category-grid">
+                
+                <!-- Date & Time Category -->
+                <div class="category-card" id="date-calc">
+                    <h3><i class="fa-regular fa-calendar-days"></i> Date & Time</h3>
+                    <ul>
+                        <li><a href="#">Date Difference Calculator</a></li>
+                        <li><a href="#">Days Between Dates</a></li>
+                        <li><a href="#">Date Add/Subtract Calculator</a></li>
+                        <li><a href="#">Birthday Countdown</a></li>
+                        <li><a href="#">Time Duration Calculator</a></li>
+                    </ul>
+                </div>
+
+                <!-- Math Category -->
+                <div class="category-card">
+                    <h3><i class="fa-solid fa-calculator"></i> Math Calculators</h3>
+                    <ul>
+                        <li><a href="#">Percentage Calculator</a></li>
+                        <li><a href="#">Average Calculator</a></li>
+                        <li><a href="#">Ratio Calculator</a></li>
+                        <li><a href="#">Profit & Loss Calculator</a></li>
+                        <li><a href="#">Discount Calculator</a></li>
+                        <li><a href="#">GST Calculator</a></li>
+                    </ul>
+                </div>
+
+                <!-- Finance Category -->
+                <div class="category-card">
+                    <h3><i class="fa-solid fa-sack-dollar"></i> Finance Calculators</h3>
+                    <ul>
+                        <li><a href="#">EMI Calculator</a></li>
+                        <li><a href="#">SIP Calculator</a></li>
+                        <li><a href="#">FD Calculator</a></li>
+                        <li><a href="#">Loan Calculator</a></li>
+                        <li><a href="#">Simple Interest Calculator</a></li>
+                        <li><a href="#">Compound Interest Calculator</a></li>
+                    </ul>
+                </div>
+
+                <!-- Health Category -->
+                <div class="category-card">
+                    <h3><i class="fa-solid fa-heart-pulse"></i> Health Calculators</h3>
+                    <ul>
+                        <li><a href="#">BMI Calculator</a></li>
+                        <li><a href="#">BMR Calculator</a></li>
+                        <li><a href="#">Calorie Calculator</a></li>
+                        <li><a href="#">Ideal Weight Calculator</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Image Ad 2 -->
+        <div class="ad-container">
+            <span class="ad-label">SPONSORED</span>
+            <div class="ad-banner-content" onclick="alert('Demo Advertisement Space')">
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=300&q=80" alt="Ad" class="ad-image">
+                <div class="ad-banner-text">
+                    <h4>💼 Master Full-Stack AI Development</h4>
+                    <p>Live interactive classes, real-world projects & job assistance program.</p>
+                </div>
+                <div class="ad-btn">Apply Now</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/919131053539?text=Hello!%20I%20have%20a%20query%20regarding%20Mpage.online." class="whatsapp-float" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span class="whatsapp-text">WhatsApp Support</span>
+    </a>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>About</h4>
+                <ul>
+                    <li><a onclick="openModal('about')">About Us</a></li>
+                    <li><a href="#">Our Team</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact & Help</h4>
+                <ul>
+                    <li><a onclick="openModal('contact')">Contact Us</a></li>
+                    <li><a onclick="openModal('support')">Support</a></li>
+                    <li><a href="https://wa.me/919131053539">WhatsApp Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Legal Pages</h4>
+                <ul>
+                    <li><a onclick="openModal('privacy')">Privacy Policy</a></li>
+                    <li><a onclick="openModal('terms')">Terms & Conditions</a></li>
+                    <li><a onclick="openModal('disclaimer')">Disclaimer</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Site Map</h4>
+                <ul>
+                    <li><a onclick="openModal('sitemap')">Sitemap</a></li>
+                    <li><a href="#all-calc">All Calculators</a></li>
+                </ul>
+            </div>
+        </div>
+        <p class="copyright">&copy; 2026 Mpage.online. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Modal Dynamic Content Container -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Application Script Logic -->
+    <script>
+        const dobInput = document.getElementById('dob');
+        const targetInput = document.getElementById('targetDate');
+        
+        const todayStr = new Date().toISOString().split('T')[0];
+        dobInput.max = todayStr;
+        targetInput.value = todayStr;
+
+        let currentLang = 'hi';
+
+        const translations = {
+            hi: {
+                mHome: "होम", mAge: "एज कैलकुलेटर", mDate: "डेट कैलकुलेटर", mAll: "सभी कैलकुलेटर", mAbout: "हमारे बारे में", mContact: "संपर्क करें",
+                title: "सटीक आयु कैलकुलेटर (MpAge Calculator)", subtitle: "अपनी उम्र, जन्म का दिन, कुल जन्मदिन, राशि (Zodiac) और जीवन के आंकड़े जानें",
+                dobLabel: "जन्म तिथि (DOB)", targetDateLabel: "इस तिथि तक आयु (ऐच्छिक)", calcBtn: "आयु की गणना करें", resetBtn: "रीसेट",
+                years: "वर्ष", months: "महीने", days: "दिन", analyticsTitle: "जीवन और राशि संबंधी जानकारी",
+                birthDay: "जन्म का दिन", zodiac: "राशि (Zodiac Sign)", totalBirthdays: "कुल मनाए गए जन्मदिन", nextBday: "अगला जन्मदिन",
+                totalDays: "कुल जिए गए दिन", totalHours: "कुल जिए गए घंटे", totalMinutes: "कुल जिए गए मिनट",
+                copyBtn: "समरी कॉपी करें", printBtn: "प्रिंट / PDF डाउनलोड", dirTitle: "Mpage.online पर सभी कैलकुलेटर का उपयोग करें",
+                langBtn: "🌐 Switch to English"
+            },
+            en: {
+                mHome: "Home", mAge: "Age Calculator", mDate: "Date Calculator", mAll: "All Calculators", mAbout: "About Us", mContact: "Contact Us",
+                title: "Precision Age Calculator", subtitle: "Calculate your exact age, birth day, total birthdays, zodiac sign & life statistics",
+                dobLabel: "Date of Birth (DOB)", targetDateLabel: "Age at Date (Optional)", calcBtn: "Calculate Age", resetBtn: "Reset",
+                years: "Years", months: "Months", days: "Days", analyticsTitle: "Life & Zodiac Insights",
+                birthDay: "Day of Birth", zodiac: "Zodiac Sign", totalBirthdays: "Total Birthdays Celebrated", nextBday: "Next Birthday In",
+                totalDays: "Total Days Lived", totalHours: "Total Hours Lived", totalMinutes: "Total Minutes Lived",
+                copyBtn: "Copy Summary", printBtn: "Print / Download PDF", dirTitle: "Explore All Calculators on Mpage.online",
+                langBtn: "🌐 हिंदी में बदलें"
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'hi' ? 'en' : 'hi';
+            document.querySelectorAll('[data-key]').forEach(elem => {
+                const key = elem.getAttribute('data-key');
+                if (translations[currentLang][key]) {
+                    elem.innerText = translations[currentLang][key];
+                }
+            });
+            document.getElementById('lang-btn').innerText = translations[currentLang].langBtn;
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function getZodiac(day, month) {
+            const zodiacs = [
+                { name: 'Capricorn ♑', month: 1, day: 19 },
+                { name: 'Aquarius ♒', month: 2, day: 18 },
+                { name: 'Pisces ♓', month: 3, day: 20 },
+                { name: 'Aries ♈', month: 4, day: 19 },
+                { name: 'Taurus ♉', month: 5, day: 20 },
+                { name: 'Gemini ♊', month: 6, day: 20 },
+                { name: 'Cancer ♋', month: 7, day: 22 },
+                { name: 'Leo ♌', month: 8, day: 22 },
+                { name: 'Virgo ♍', month: 9, day: 22 },
+                { name: 'Libra ♎', month: 10, day: 22 },
+                { name: 'Scorpio ♏', month: 11, day: 21 },
+                { name: 'Sagittarius ♐', month: 12, day: 21 }
+            ];
+            
+            if (month === 1 && day <= 19) return 'Capricorn ♑';
+            const found = zodiacs.find(z => z.month === month && day <= z.day);
+            return found ? found.name : 'Capricorn ♑';
+        }
+
+        function calculateAge() {
+            const dob = dobInput.value;
+            if (!dob) {
+                alert(currentLang === 'hi' ? "कृपया अपनी जन्म तिथि चुनें!" : "Please select your Date of Birth!");
+                return;
+            }
+
+            const birthDate = new Date(dob);
+            const targetDate = targetInput.value ? new Date(targetInput.value) : new Date();
+
+            let years = targetDate.getFullYear() - birthDate.getFullYear();
+            let months = targetDate.getMonth() - birthDate.getMonth();
+            let days = targetDate.getDate() - birthDate.getDate();
+
+            if (days < 0) {
+                months--;
+                const lastMonth = new Date(targetDate.getFullYear(), targetDate.getMonth(), 0);
+                days += lastMonth.getDate();
+            }
+
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            const daysOfWeekEn = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const daysOfWeekHi = ['रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'];
+            
+            const birthDayName = currentLang === 'hi' ? daysOfWeekHi[birthDate.getDay()] : daysOfWeekEn[birthDate.getDay()];
+            const zodiacSign = getZodiac(birthDate.getDate(), birthDate.getMonth() + 1);
+
+            const diffTime = Math.abs(targetDate - birthDate);
+            const totalDaysVal = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            const totalHoursVal = totalDaysVal * 24;
+            const totalMinutesVal = totalHoursVal * 60;
+
+            let nextBdayYear = targetDate.getFullYear();
+            if (targetDate.getMonth() > birthDate.getMonth() || (targetDate.getMonth() === birthDate.getMonth() && targetDate.getDate() > birthDate.getDate())) {
+                nextBdayYear++;
+            }
+            const nextBdayDate = new Date(nextBdayYear, birthDate.getMonth(), birthDate.getDate());
+            const daysToNextBday = Math.ceil((nextBdayDate - targetDate) / (1000 * 60 * 60 * 24));
+
+            document.getElementById('years').innerText = years;
+            document.getElementById('months').innerText = months;
+            document.getElementById('days').innerText = days;
+
+            document.getElementById('stat-birthday-day').innerText = birthDayName;
+            document.getElementById('stat-zodiac').innerText = zodiacSign;
+            document.getElementById('stat-total-bday').innerText = years;
+            document.getElementById('stat-nextbday').innerText = `${daysToNextBday} ${currentLang === 'hi' ? 'दिन' : 'Days'}`;
+            document.getElementById('stat-days').innerText = totalDaysVal.toLocaleString();
+            document.getElementById('stat-hours').innerText = totalHoursVal.toLocaleString();
+            document.getElementById('stat-minutes').innerText = totalMinutesVal.toLocaleString();
+
+            document.getElementById('result').style.display = 'flex';
+        }
+
+        function resetCalculator() {
+            dobInput.value = '';
+            targetInput.value = todayStr;
+            document.getElementById('result').style.display = 'none';
+        }
+
+        function shareResults() {
+            const y = document.getElementById('years').innerText;
+            const m = document.getElementById('months').innerText;
+            const d = document.getElementById('days').innerText;
+            const text = `I am ${y} years, ${m} months, and ${d} days old! Calculated on Mpage.online`;
+            navigator.clipboard.writeText(text);
+            alert(currentLang === 'hi' ? "समरी कॉपी हो गई!" : "Summary copied to clipboard!");
+        }
+
+        // Modals Content Map
+        const modal = document.getElementById('modal');
+        const modalBody = document.getElementById('modal-body');
+
+        const pagesContent = {
+            about: `<h2>About Us</h2><br><p>MpAge Calculator (Mpage.online) is a premier platform offering high-precision tools for age, finance, math, and health calculations free of charge.</p>`,
+            contact: `<h2>Contact Us</h2><br><p><strong>WhatsApp Support:</strong> +91 9131053539</p><p><strong>Email:</strong> contact@mpage.online</p>`,
+            support: `<h2>Help & Support</h2><br><p>If you face any issues while using our calculators, feel free to contact us via WhatsApp or Email.</p>`,
+            privacy: `<h2>Privacy Policy</h2><br><p>Mpage.online operates 100% locally on your browser. We never collect or store your date of birth or any personal data.</p>`,
+            terms: `<h2>Terms & Conditions</h2><br><p>Our tools are intended for informational purposes. While we ensure max precision, verify critical calculations independently.</p>`,
+            disclaimer: `<h2>Disclaimer</h2><br><p>Mpage.online is not liable for administrative decisions made based purely on calculator results.</p>`,
+            sitemap: `<h2>Sitemap</h2><br><p>- Home<br>- Age Calculator<br>- Date Calculators<br>- Math Calculators<br>- Finance Calculators<br>- Health Calculators</p>`
+        };
+
+        function openModal(page) {
+            modalBody.innerHTML = pagesContent[page];
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(e) {
+            if (e.target == modal) closeModal();
+        }
+    </script>
+</body>
+</html>
